@@ -6,12 +6,13 @@
     "esModuleInterop": true, 
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "types": ["node"],
 
-    "rootDir": "./src",
+    "rootDir": "./",
     "outDir": "./dist",
 
     "moduleResolution": "nodenext" 
   },
-  "include": ["src/**/*"], 
-  "exclude": ["node_modules"] 
+  "include": ["src/**/*", "lib/**/*"], 
+  "exclude": ["node_modules", "dist", "generated"] 
 }
