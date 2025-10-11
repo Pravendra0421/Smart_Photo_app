@@ -24,4 +24,30 @@ export class CreateGroupController {
       res.status(500).json({ message: "Internal Server Error" });
     }
   }
+  async GetAllGroup(req: Request, res: Response) {
+    try {
+      const firebaseUser = req.User!;
+      const firebaseUid = firebaseUser?.uid;
+      const GetAllGroup = await createGroupusecase.getAllGroup(firebaseUid);
+      return res.status(201).json(GetAllGroup);
+    } catch (error) {
+      console.error("Get All Group error:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
+  async GetGroupById(req: Request, res: Response) {
+    try {
+      const { groupId } = req.params;
+      const firebaseUser = req.User!;
+      const firebaseUid = firebaseUser?.uid;
+      const GetGroupById = await createGroupusecase.GetByGroupId(
+        firebaseUid,
+        groupId
+      );
+      return res.status(201).json(GetGroupById);
+    } catch (error) {
+      console.error("Get Group By Id error:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
 }

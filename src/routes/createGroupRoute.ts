@@ -4,4 +4,6 @@ import { AuthMiddleware } from "../middleware/authMiddleware.js";
 const router = Router();
 const createGroupController = new CreateGroupController();
 router.post("/create", AuthMiddleware, createGroupController.createGroup);
+router.get("/getAll", AuthMiddleware, createGroupController.GetAllGroup);
+router.get("/:groupId", AuthMiddleware, createGroupController.GetGroupById);
 export default router;

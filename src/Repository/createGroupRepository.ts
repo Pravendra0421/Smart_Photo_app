@@ -4,6 +4,8 @@ import prisma from "../../lib/prisma.js";
 
 export interface IcreateGroupRepository {
   createGroup(data: createGroupDtos, userId: string): Promise<GroupEntity>;
+  getAllGroup(): Promise<GroupEntity[]>;
+  getById(id: string): Promise<GroupEntity | null>;
 }
 function generateUniqueCode(length = 6) {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -37,5 +39,15 @@ export class CreateGroupRepo implements IcreateGroupRepository {
       return group;
     });
     return newGroup as GroupEntity;
+  }
+  async getAllGroup(): Promise<GroupEntity[]> {
+    const getAll = await prisma.group.findMany({});
+    return getAll;
+  }
+  async getById(id: string): Promise<GroupEntity | null> {
+    const getById = await prisma.group.findFirst({
+      where: { id },
+    });
+    return getById;
   }
 }

@@ -23,4 +23,27 @@ export class CreateGroupUsecase {
     const creategrp = await this.CreateGroupRepo.createGroup(data, userId);
     return creategrp;
   }
+  async getAllGroup(firebaseUid: string): Promise<GroupEntity[]> {
+    const existingUser = await this.UserRepository.findByFirebaseId(
+      firebaseUid
+    );
+    if (!existingUser) {
+      throw new Error("please signup or login user does not exist");
+    }
+    const GetAll = await this.CreateGroupRepo.getAllGroup();
+    return GetAll;
+  }
+  async GetByGroupId(
+    firebaseUid: string,
+    groupId: string
+  ): Promise<GroupEntity | null> {
+    const existingUser = await this.UserRepository.findByFirebaseId(
+      firebaseUid
+    );
+    if (!existingUser) {
+      throw new Error("please signup or login user does not exist");
+    }
+    const getByGroupId = await this.CreateGroupRepo.getById(groupId);
+    return getByGroupId;
+  }
 }
