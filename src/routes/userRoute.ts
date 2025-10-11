@@ -1,0 +1,10 @@
+import { Router } from "express";
+import { AuthMiddleware } from "../middleware/authMiddleware.js";
+import { UserController } from "../controller/userController.js";
+const router = Router();
+const userController = new UserController();
+router.post("/create", AuthMiddleware, userController.CreateUser);
+router.put("/update", AuthMiddleware, userController.UpdateUser);
+router.get("/find-all", AuthMiddleware, userController.FindAll);
+router.delete("/delete", AuthMiddleware, userController.DeleteUser);
+export default router;
