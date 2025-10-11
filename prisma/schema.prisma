@@ -37,13 +37,42 @@ model OnboardingScreen {
 }
 
 model UserModel {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  uid         String   @unique
-  email       String?  @unique
-  phoneNumber String?  @unique
-  firstName   String?
-  lastName    String?
-  imageUrl    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  uid              String            @unique
+  email            String?           @unique
+  phoneNumber      String?           @unique
+  firstName        String?
+  lastName         String?
+  imageUrl         String?
+  groupMemberships GroupMembership[] // All groups the user is a member of
+  ownedGroups      Group[]           @relation("GroupOwner")
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model Group {
+  id          String            @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  uCode       String            @unique
+  privacyType PrivacyType
+  imageUrl    String
+  ownerId     String            @db.ObjectId
+  owner       UserModel         @relation("GroupOwner", fields: [ownerId], references: [id])
+  memberships GroupMembership[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model GroupMembership {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String    @db.ObjectId
+  groupId   String    @db.ObjectId
+  user      UserModel @relation(fields: [userId], references: [id])
+  group     Group     @relation(fields: [groupId], references: [id])
+  createdAt DateTime  @default(now())
+}
+
+enum PrivacyType {
+  PERSONAL // Members can see ALL photos
+  PUBLIC // Members can only see their OWN photos
 }
