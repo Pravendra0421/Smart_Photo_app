@@ -6,6 +6,7 @@ export interface IcreateGroupRepository {
   createGroup(data: createGroupDtos, userId: string): Promise<GroupEntity>;
   getAllGroup(): Promise<GroupEntity[]>;
   getById(id: string): Promise<GroupEntity | null>;
+  findGroupByUcode(uCode: string): Promise<GroupEntity | null>;
 }
 function generateUniqueCode(length = 6) {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -34,6 +35,7 @@ export class CreateGroupRepo implements IcreateGroupRepository {
         data: {
           userId: userId,
           groupId: group.id,
+          role: "ADMIN",
         },
       });
       return group;
@@ -47,7 +49,16 @@ export class CreateGroupRepo implements IcreateGroupRepository {
   async getById(id: string): Promise<GroupEntity | null> {
     const getById = await prisma.group.findFirst({
       where: { id },
+      include: {
+        photos: true,
+      },
     });
     return getById;
+  }
+  async findGroupByUcode(uCode: string): Promise<GroupEntity | null> {
+    const findGroup = await prisma.group.findUnique({
+      where: { uCode },
+    });
+    return findGroup;
   }
 }

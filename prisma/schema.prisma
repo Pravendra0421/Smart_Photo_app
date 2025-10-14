@@ -46,6 +46,7 @@ model UserModel {
   imageUrl         String?
   groupMemberships GroupMembership[] // All groups the user is a member of
   ownedGroups      Group[]           @relation("GroupOwner")
+  uploadPhoto      Photo[]
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
 }
@@ -59,6 +60,7 @@ model Group {
   ownerId     String            @db.ObjectId
   owner       UserModel         @relation("GroupOwner", fields: [ownerId], references: [id])
   memberships GroupMembership[]
+  photos      Photo[]
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
 }
@@ -67,12 +69,29 @@ model GroupMembership {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   userId    String    @db.ObjectId
   groupId   String    @db.ObjectId
+  role      GroupRole @default(MEMBER)
   user      UserModel @relation(fields: [userId], references: [id])
   group     Group     @relation(fields: [groupId], references: [id])
   createdAt DateTime  @default(now())
 }
 
+model Photo {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  url          String
+  uploadedById String    @db.ObjectId
+  uploadedBy   UserModel @relation(fields: [uploadedById], references: [id])
+  groupId      String    @db.ObjectId
+  group        Group     @relation(fields: [groupId], references: [id])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
 enum PrivacyType {
   PERSONAL // Members can see ALL photos
   PUBLIC // Members can only see their OWN photos
+}
+
+enum GroupRole {
+  ADMIN
+  MEMBER
 }
