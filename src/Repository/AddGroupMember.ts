@@ -4,10 +4,7 @@ import { GroupMemberShipEntity } from "../entity/GroupEntity.js";
 export interface IGroupMemberRepository {
   addMember(userId: string, groupId: string): Promise<GroupMemberShipEntity>;
   DeleteMember(id: string): Promise<void>;
-  GetMembershipByuserId(
-    userId: string,
-    groupId: string
-  ): Promise<GroupMemberShipEntity | null>;
+  GetMembershipByuserId(userId: string): Promise<GroupMemberShipEntity[]>;
   getAllMemberInGroup(groupId: string): Promise<GroupMemberShipEntity[]>;
 }
 export class GroupMembershipRepository implements IGroupMemberRepository {
@@ -43,13 +40,11 @@ export class GroupMembershipRepository implements IGroupMemberRepository {
     return getAllMember;
   }
   async GetMembershipByuserId(
-    userId: string,
-    groupId: string
-  ): Promise<GroupMemberShipEntity | null> {
-    const FetchMemberShiip = await prisma.groupMembership.findFirst({
+    userId: string
+  ): Promise<GroupMemberShipEntity[]> {
+    const FetchMemberShiip = await prisma.groupMembership.findMany({
       where: {
-        userId: userId,
-        groupId: groupId,
+        userId,
       },
       include: {
         user: true,

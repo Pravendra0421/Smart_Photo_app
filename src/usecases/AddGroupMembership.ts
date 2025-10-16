@@ -26,7 +26,7 @@ export class GroupMemberShipUsecase {
     }
     const groupId = existingGroup.id;
     const existingMemberShip =
-      await this.GroupMemberRepository.GetMembershipByuserId(userId, groupId);
+      await this.GroupMemberRepository.GetMembershipByuserId(userId);
     if (existingMemberShip) {
       throw new Error("You are already member of this group");
     }
@@ -46,5 +46,19 @@ export class GroupMemberShipUsecase {
     const AllmemberInGroup =
       await this.GroupMemberRepository.getAllMemberInGroup(groupId);
     return AllmemberInGroup;
+  }
+  async GetAllMemberByUserId(
+    firebaseUid: string
+  ): Promise<GroupMemberShipEntity[]> {
+    const existingUser = await this.UserRepository.findByFirebaseId(
+      firebaseUid
+    );
+    if (!existingUser) {
+      throw new Error("user doesnot exist please login");
+    }
+    const userId = existingUser.id;
+    const GetMembership =
+      await this.GroupMemberRepository.GetMembershipByuserId(userId);
+    return GetMembership;
   }
 }

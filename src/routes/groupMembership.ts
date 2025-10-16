@@ -10,6 +10,11 @@ router.delete(
   groupMembershipController.DeleteMembership
 );
 router.get(
+  "/all",
+  AuthMiddleware,
+  groupMembershipController.GetAllMemberByUser
+);
+router.get(
   "/:groupId",
   AuthMiddleware,
   groupMembershipController.GetAllMemberInGroup

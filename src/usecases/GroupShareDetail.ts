@@ -15,7 +15,7 @@ export class ShareDetailUsecase {
     }
     const userId = existingUser.id;
     const existingMemberShip =
-      await this.GroupMemberShipRepo.GetMembershipByuserId(userId, groupId);
+      await this.GroupMemberShipRepo.GetMembershipByuserId(userId);
     if (!existingMemberShip) {
       throw new Error("this member is not in this group ");
     }

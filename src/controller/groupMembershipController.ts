@@ -55,4 +55,19 @@ export class GroupMembershipController {
       });
     }
   }
+  async GetAllMemberByUser(req: Request, res: Response) {
+    try {
+      const firebaseUSer = req.User!;
+      const firebaseUid = firebaseUSer.uid;
+      const GetMembership = await groupmembershipusecase.GetAllMemberByUserId(
+        firebaseUid
+      );
+      return res.status(201).json(GetMembership);
+    } catch (error) {
+      console.error("Error during GetAll the mebership", error);
+      return res.status(500).json({
+        message: "during GetAll the groupmember",
+      });
+    }
+  }
 }
