@@ -8,6 +8,7 @@ import CreateGroupRoute from "./routes/createGroupRoute.js";
 import GroupMembershipRoute from "./routes/groupMembership.js";
 import UploadImageRoute from "./routes/uploadImageRoute.js";
 import ShareDetail from "./routes/GroupShareDetail.js";
+import SearchGroup from "./routes/SearchGroupRoute.js";
 import "../lib/firebaseAdmin.js";
 configDotenv();
 const app = express();
@@ -21,6 +22,7 @@ app.use("/api/Group", CreateGroupRoute);
 app.use("/api/groupmembership", GroupMembershipRoute);
 app.use("/api/upload", UploadImageRoute);
 app.use("/api/share-detail", ShareDetail);
+app.use("/api/search", SearchGroup);
 app.get("/", (req, res) => {
   res.send("Hello KwicPic");
 });
