@@ -7,4 +7,5 @@ router.post("/create", AuthMiddleware, userController.CreateUser);
 router.put("/update", AuthMiddleware, userController.UpdateUser);
 router.get("/find-all", AuthMiddleware, userController.FindAll);
 router.delete("/delete", AuthMiddleware, userController.DeleteUser);
+router.get("/getprofile", AuthMiddleware, userController.GetProfile);
 export default router;

@@ -26,7 +26,10 @@ export class GroupMemberShipUsecase {
     }
     const groupId = existingGroup.id;
     const existingMemberShip =
-      await this.GroupMemberRepository.GetMembershipByuserId(userId);
+      await this.GroupMemberRepository.getAllMembershipByUserid_GroupId(
+        userId,
+        groupId
+      );
     if (existingMemberShip) {
       throw new Error("You are already member of this group");
     }

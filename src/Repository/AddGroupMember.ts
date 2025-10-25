@@ -6,6 +6,10 @@ export interface IGroupMemberRepository {
   DeleteMember(id: string): Promise<void>;
   GetMembershipByuserId(userId: string): Promise<GroupMemberShipEntity[]>;
   getAllMemberInGroup(groupId: string): Promise<GroupMemberShipEntity[]>;
+  getAllMembershipByUserid_GroupId(
+    userId: string,
+    groupId: string
+  ): Promise<GroupMemberShipEntity | null>;
 }
 export class GroupMembershipRepository implements IGroupMemberRepository {
   async addMember(
@@ -52,5 +56,18 @@ export class GroupMembershipRepository implements IGroupMemberRepository {
       },
     });
     return FetchMemberShiip;
+  }
+  async getAllMembershipByUserid_GroupId(
+    userId: string,
+    groupId: string
+  ): Promise<GroupMemberShipEntity | null> {
+    const FetchMember = await prisma.groupMembership.findFirst({
+      where: { userId, groupId },
+      include: {
+        user: true,
+        group: true,
+      },
+    });
+    return FetchMember;
   }
 }

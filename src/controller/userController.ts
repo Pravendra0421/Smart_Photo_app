@@ -55,6 +55,19 @@ export class UserController {
       });
     }
   }
+  async GetProfile(req: Request, res: Response) {
+    try {
+      const firebaseUser = req.User!;
+      const firebaseUid = firebaseUser.uid;
+      const GetProfile = await Userusecase.getProfile(firebaseUid);
+      return res.status(201).json(GetProfile);
+    } catch (error) {
+      console.error("User get Profile", error);
+      return res.status(500).json({
+        message: "Internal server Error",
+      });
+    }
+  }
 }
 
 // import {

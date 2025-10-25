@@ -9,6 +9,7 @@ export interface IUserRepository {
   findByFirebaseId(firebaseId: string): Promise<UserEntity>;
   findAllUser(): Promise<UserEntity[]>;
   DeleteUSer(id: string): Promise<void>;
+  getMyProfile(uid: string): Promise<UserEntity>;
 }
 export class UserRepository implements IUserRepository {
   async createUser(data: UserDtos): Promise<UserEntity> {
@@ -49,6 +50,14 @@ export class UserRepository implements IUserRepository {
     await prisma.userModel.delete({
       where: { id },
     });
+  }
+  async getMyProfile(uid: string): Promise<UserEntity> {
+    const getProfile = await prisma.userModel.findUnique({
+      where: {
+        uid,
+      },
+    });
+    return getProfile as UserEntity;
   }
 }
 // import prisma from "../../lib/prisma.js";

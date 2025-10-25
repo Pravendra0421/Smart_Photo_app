@@ -5,7 +5,7 @@ const router = Router();
 const groupMembershipController = new GroupMembershipController();
 router.post("/add", AuthMiddleware, groupMembershipController.AddMember);
 router.delete(
-  "/delete",
+  "/:groupMembershipId",
   AuthMiddleware,
   groupMembershipController.DeleteMembership
 );

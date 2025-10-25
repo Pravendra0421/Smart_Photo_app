@@ -41,6 +41,10 @@ export class UserUsecase {
     const deleteUSer = await this.UserRepository.DeleteUSer(userId);
     return deleteUSer;
   }
+  async getProfile(firebaseUid: string): Promise<UserEntity> {
+    const getprofile = await this.UserRepository.getMyProfile(firebaseUid);
+    return getprofile;
+  }
 }
 
 // import { IUserRepository } from "../Repository/userRepository.js";
