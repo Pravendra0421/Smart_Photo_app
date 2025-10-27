@@ -47,8 +47,9 @@ model UserModel {
   groupMemberships GroupMembership[] // All groups the user is a member of
   ownedGroups      Group[]           @relation("GroupOwner")
   uploadPhoto      Photo[]
+  uploadVideo      Video[]
   createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
+  updatedAt        DateTime?         @updatedAt
 }
 
 model Group {
@@ -61,8 +62,9 @@ model Group {
   owner       UserModel         @relation("GroupOwner", fields: [ownerId], references: [id])
   memberships GroupMembership[]
   photos      Photo[]
+  vidoes      Video[]
   createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  updatedAt   DateTime?         @updatedAt
 }
 
 model GroupMembership {
@@ -77,6 +79,17 @@ model GroupMembership {
 
 model Photo {
   id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  url          String
+  uploadedById String    @db.ObjectId
+  uploadedBy   UserModel @relation(fields: [uploadedById], references: [id])
+  groupId      String    @db.ObjectId
+  group        Group     @relation(fields: [groupId], references: [id])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Video {
+  iid          String    @id @default(auto()) @map("_id") @db.ObjectId
   url          String
   uploadedById String    @db.ObjectId
   uploadedBy   UserModel @relation(fields: [uploadedById], references: [id])

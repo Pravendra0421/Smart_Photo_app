@@ -56,6 +56,10 @@ export class UserRepository implements IUserRepository {
       where: {
         uid,
       },
+      include: {
+        uploadPhoto: true,
+        uploadVideo: true,
+      },
     });
     return getProfile as UserEntity;
   }

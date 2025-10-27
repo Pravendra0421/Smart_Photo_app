@@ -51,6 +51,7 @@ export class CreateGroupRepo implements IcreateGroupRepository {
       where: { id },
       include: {
         photos: true,
+        vidoes: true,
       },
     });
     return getById;
