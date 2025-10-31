@@ -10,6 +10,7 @@ export interface IUserRepository {
   findAllUser(): Promise<UserEntity[]>;
   DeleteUSer(id: string): Promise<void>;
   getMyProfile(uid: string): Promise<UserEntity>;
+  checkContact(phoneNumbers: string[]): Promise<UserEntity[]>;
 }
 export class UserRepository implements IUserRepository {
   async createUser(data: UserDtos): Promise<UserEntity> {
@@ -57,11 +58,25 @@ export class UserRepository implements IUserRepository {
         uid,
       },
       include: {
-        uploadPhoto: true,
-        uploadVideo: true,
+        _count: {
+          select: {
+            uploadPhoto: true,
+            uploadVideo: true,
+          },
+        },
       },
     });
     return getProfile as UserEntity;
+  }
+  async checkContact(phoneNumbers: string[]): Promise<UserEntity[]> {
+    const checkContact = await prisma.userModel.findMany({
+      where: {
+        phoneNumber: {
+          in: phoneNumbers,
+        },
+      },
+    });
+    return checkContact as UserEntity[];
   }
 }
 // import prisma from "../../lib/prisma.js";

@@ -19,4 +19,9 @@ router.get(
   AuthMiddleware,
   groupMembershipController.GetAllMemberInGroup
 );
+router.post(
+  "/add-members",
+  AuthMiddleware,
+  groupMembershipController.addMultipleMembersToGroup
+);
 export default router;

@@ -68,6 +68,23 @@ export class UserController {
       });
     }
   }
+  async checkContact(req: Request, res: Response) {
+    try {
+      const { phoneNumbers } = req.body;
+      if (!phoneNumbers || !Array.isArray(phoneNumbers)) {
+        return res
+          .status(400)
+          .json({ message: "Invalid input. 'phoneNumbers' must be an array." });
+      }
+      const checkContact = await Userusecase.checkContact(phoneNumbers);
+      return res.status(201).json(checkContact);
+    } catch (error) {
+      console.error("check-contact error", error);
+      return res.status(500).json({
+        message: "Internal server error",
+      });
+    }
+  }
 }
 
 // import {

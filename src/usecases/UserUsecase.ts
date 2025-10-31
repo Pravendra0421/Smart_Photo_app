@@ -45,6 +45,10 @@ export class UserUsecase {
     const getprofile = await this.UserRepository.getMyProfile(firebaseUid);
     return getprofile;
   }
+  async checkContact(phoneNumbers: string[]): Promise<UserEntity[]> {
+    const checkcontact = await this.UserRepository.checkContact(phoneNumbers);
+    return checkcontact;
+  }
 }
 
 // import { IUserRepository } from "../Repository/userRepository.js";

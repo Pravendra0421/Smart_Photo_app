@@ -10,6 +10,14 @@ export interface IGroupMemberRepository {
     userId: string,
     groupId: string
   ): Promise<GroupMemberShipEntity | null>;
+  addMultipleMembersToGroup(
+    groupId: string,
+    newUserIds: string[]
+  ): Promise<{ count: number }>;
+  findExistingMembers(
+    groupId: string,
+    userIds: string[]
+  ): Promise<GroupMemberShipEntity[]>;
 }
 export class GroupMembershipRepository implements IGroupMemberRepository {
   async addMember(
@@ -69,5 +77,29 @@ export class GroupMembershipRepository implements IGroupMemberRepository {
       },
     });
     return FetchMember;
+  }
+  async findExistingMembers(
+    groupId: string,
+    userIds: string[]
+  ): Promise<GroupMemberShipEntity[]> {
+    const find = await prisma.groupMembership.findMany({
+      where: {
+        groupId: groupId,
+        userId: {
+          in: userIds,
+        },
+      },
+    });
+    return find;
+  }
+  async addMultipleMembersToGroup(groupId: string, newUserIds: string[]) {
+    const newMembersData = newUserIds.map((userId) => ({
+      userId: userId,
+      groupId: groupId,
+    }));
+    const addMember = await prisma.groupMembership.createMany({
+      data: newMembersData,
+    });
+    return addMember;
   }
 }

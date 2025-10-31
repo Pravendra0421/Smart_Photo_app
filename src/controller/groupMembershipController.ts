@@ -70,4 +70,20 @@ export class GroupMembershipController {
       });
     }
   }
+  async addMultipleMembersToGroup(req: Request, res: Response) {
+    try {
+      const firebaseUSer = req.User!;
+      const firebaseUid = firebaseUSer.uid;
+      const { groupId, userIdsToAdd } = req.body;
+      const add = await groupmembershipusecase.addMultipleMembers(
+        firebaseUid,
+        groupId,
+        userIdsToAdd
+      );
+      return res.status(201).json(add);
+    } catch (error) {
+      console.error("Error in addMultipleMembersToGroup controller:", error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
 }

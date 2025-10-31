@@ -8,4 +8,5 @@ router.put("/update", AuthMiddleware, userController.UpdateUser);
 router.get("/find-all", AuthMiddleware, userController.FindAll);
 router.delete("/delete", AuthMiddleware, userController.DeleteUser);
 router.get("/getprofile", AuthMiddleware, userController.GetProfile);
+router.post("/check-contacts", AuthMiddleware, userController.checkContact);
 export default router;

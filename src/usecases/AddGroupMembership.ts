@@ -64,4 +64,52 @@ export class GroupMemberShipUsecase {
       await this.GroupMemberRepository.GetMembershipByuserId(userId);
     return GetMembership;
   }
+  async addMultipleMembers(
+    firebaseUid: string,
+    groupId: string,
+    userIdsToAdd: string[]
+  ) {
+    if (!groupId || !Array.isArray(userIdsToAdd) || userIdsToAdd.length === 0) {
+      throw new Error(
+        "Invalid input. 'groupId' and 'userIdsToAdd' (array) are required."
+      );
+    }
+    const existingUser = await this.UserRepository.findByFirebaseId(
+      firebaseUid
+    );
+    if (!existingUser) {
+      throw new Error("user doesnot exist please login");
+    }
+    const userId = existingUser.id;
+    const adminMembership =
+      await this.GroupMemberRepository.getAllMembershipByUserid_GroupId(
+        userId,
+        groupId
+      );
+    if (!adminMembership || adminMembership.role !== "ADMIN") {
+      throw new Error(
+        "You do not have permission to add members to this group."
+      );
+    }
+    const existingMembers =
+      await this.GroupMemberRepository.findExistingMembers(
+        groupId,
+        userIdsToAdd
+      );
+    const existingUserIds = existingMembers.map((mem) => mem.userId);
+    const newUserIdsToAdd = userIdsToAdd.filter(
+      (id) => !existingUserIds.includes(id)
+    );
+    if (newUserIdsToAdd.length === 0) {
+      return { message: "All users are already members.", count: 0 };
+    }
+    const result = await this.GroupMemberRepository.addMultipleMembersToGroup(
+      groupId,
+      newUserIdsToAdd
+    );
+    return {
+      message: `Successfully added ${result.count} new members.`,
+      count: result.count,
+    };
+  }
 }
